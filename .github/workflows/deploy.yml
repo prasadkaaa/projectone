@@ -24,6 +24,7 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+        working-directory: my-app
 
       - name: Install CDS & MBT
         run: |
