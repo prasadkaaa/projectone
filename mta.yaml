@@ -1,0 +1,39 @@
+_schema-version: "3.1"
+ID: simple-cap-app
+version: 1.0.0
+
+modules:
+
+  - name: simple-cap-srv
+    type: nodejs
+    path: srv
+    parameters:
+      memory: 128M
+    provides:
+      - name: srv-api
+        properties:
+          url: ${default-url}
+    requires:
+      - name: xsuaa-service    
+
+  - name: simple-approuter
+    type: approuter.nodejs
+    path: app
+    parameters:
+      memory: 128M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{url}
+          forwardAuthToken: true
+      - name: xsuaa-service
+
+resources:
+  - name: xsuaa-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: xs-security.json
