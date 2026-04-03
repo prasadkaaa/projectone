@@ -1,0 +1,51 @@
+name: Deploy CAP to SAP BTP
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install CDS & MBT
+        run: |
+          npm install -g @sap/cds-dk
+          npm install -g mbt
+
+      - name: Build CAP Project
+        run: cds build
+
+      - name: Build MTA
+        run: mbt build
+
+      # 👉 THIS IS WHERE YOUR CODE STARTS
+      - name: Install CF CLI
+        run: |
+          wget -q -O cf-cli.deb https://packages.cloudfoundry.org/stable?release=debian64&source=github
+          sudo dpkg -i cf-cli.deb
+
+      - name: Login to SAP BTP
+        run: |
+          cf login -a ${{ secrets.CF_API }} \
+                   -u ${{ secrets.CF_USERNAME }} \
+                   -p ${{ secrets.CF_PASSWORD }} \
+                   -o ${{ secrets.CF_ORG }} \
+                   -s ${{ secrets.CF_SPACE }}
+
+      - name: Deploy to BTP
+        run: |
+          cf deploy mta_archives/*.mtar
