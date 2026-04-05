@@ -38,28 +38,38 @@ jobs:
       - name: Build MTA
         run: mbt build
 
-      # 👉 THIS IS WHERE YOUR CODE STARTS
-      - name: Install CF CLI
-        run: |
-              curl -fsSL https://packages.cloudfoundry.org/install.sh | sudo bash
-     
-              echo "/usr/local/bin" >> $GITHUB_PATH
+      
 
-      - name: Verify CF CLI
-        run: cf --version
+      
 
-      - name: Install CF MultiApps Plugin
+      - name: CF Login
         run: |
-          cf install-plugin -f multiapps
-
-      - name: Login to SAP BTP
-        run: |
-          cf login -a ${{ secrets.CF_API }} \
-                   -u ${{ secrets.CF_USERNAME }} \
-                   -p ${{ secrets.CF_PASSWORD }} \
-                   -o ${{ secrets.CF_ORG }} \
-                   -s ${{ secrets.CF_SPACE }}
+            docker run --rm \
+            -e CF_API=${{ secrets.CF_API }} \
+            -e CF_USERNAME=${{ secrets.CF_USERNAME }} \
+            -e CF_PASSWORD=${{ secrets.CF_PASSWORD }} \
+            -e CF_ORG=${{ secrets.CF_ORG }} \
+            -e CF_SPACE=${{ secrets.CF_SPACE }} \
+            -v $PWD:/workspace \
+            -w /workspace \
+            ghcr.io/cloudfoundry/cli:latest \
+            sh -c "
+            cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE
+            "
 
       - name: Deploy to BTP
         run: |
-          cf deploy mta_archives/*.mtar
+              docker run --rm \
+              -e CF_API=${{ secrets.CF_API }} \
+              -e CF_USERNAME=${{ secrets.CF_USERNAME }} \
+              -e CF_PASSWORD=${{ secrets.CF_PASSWORD }} \
+              -e CF_ORG=${{ secrets.CF_ORG }} \
+              -e CF_SPACE=${{ secrets.CF_SPACE }} \
+              -v $PWD:/workspace \
+              -w /workspace \
+              ghcr.io/cloudfoundry/cli:latest \
+              sh -c "
+              cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE &&
+              cf install-plugin -f multiapps &&
+              cf deploy mta_archives/*.mtar -f
+              "
