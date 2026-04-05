@@ -8,10 +8,14 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main    
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
 
     steps:
       - name: Checkout Code
@@ -26,6 +30,35 @@ jobs:
       - name: Install Dependencies
         run: npm install
         
+
+      - name: Install CDS & MBT
+        run: |
+          npm install -g @sap/cds-dk
+          npm install -g mbt
+
+      - name: Build CAP Project
+        run: cds build
+
+      - name: Build MTA (Validation Only)
+        run: mbt build
+        
+   # 🚀 DEPLOY (runs only after merge to main)
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
 
       - name: Install CDS & MBT
         run: |
@@ -55,4 +88,6 @@ jobs:
             -v "$PWD:/workspace" \
             -w /workspace \
             cloudfoundry/cli:latest \
-            sh -c 'cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE && cf install-plugin -f multiapps && cf deploy mta_archives/*.mtar -f'
+            sh -c 'cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE && cf install-plugin -f multiapps && cf deploy mta_archives/*.mtar -f'      
+
+      
