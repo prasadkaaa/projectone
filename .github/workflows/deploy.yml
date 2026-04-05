@@ -39,14 +39,17 @@ jobs:
         run: mbt build
 
       # 👉 THIS IS WHERE YOUR CODE STARTS
-      - name: Clean old CF CLI
+      - name: Install CF CLI
         run: |
-              if [ -L /usr/local/bin/cf ]; then
-              sudo unlink /usr/local/bin/cf
-              fi
+              sudo apt-get update
+              sudo apt-get install -y curl
+              curl -fsSL https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo tee /usr/share/keyrings/cf-cli-keyring.gpg > /dev/null
+              echo "deb [signed-by=/usr/share/keyrings/cf-cli-keyring.gpg] https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+              sudo apt-get update
+              sudo apt-get install -y cf8-cli
 
-      - name: Setup CF CLI
-        uses: cloudfoundry/cf-cli-action@v2
+      - name: Verify CF CLI
+        run: cf --version
 
       - name: Install CF MultiApps Plugin
         run: |
