@@ -39,14 +39,17 @@ jobs:
         run: mbt build
 
       # 👉 THIS IS WHERE YOUR CODE STARTS
+      - name: Clean old CF CLI
+        run: |
+              if [ -L /usr/local/bin/cf ]; then
+              sudo unlink /usr/local/bin/cf
+              fi
+
       - name: Install CF CLI
         run: |
-         sudo rm -f /usr/local/bin/cf
-
-         wget -q https://packages.cloudfoundry.org/stable?release=linux64-binary -O cf.tgz
-         tar -xzf cf.tgz
-         sudo mv cf /usr/local/bin/cf
-         sudo chmod +x /usr/local/bin/cf
+             wget -q https://packages.cloudfoundry.org/stable?release=linux64-binary -O cf.tgz
+             tar -xzf cf.tgz
+             sudo install cf /usr/local/bin/cf
 
       - name: Verify CF CLI
         run:  which cf
