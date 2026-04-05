@@ -47,8 +47,11 @@ jobs:
 
       - name: Install CF CLI
         run: |
-             wget -q https://packages.cloudfoundry.org/stable?release=linux64-binary -O cf.tgz
+             sudo rm -f /usr/local/bin/cf
+
+             wget https://github.com/cloudfoundry/cli/releases/latest/download/cf7-cli_7.x.x_linux_x86-64.tgz -O cf.tgz
              tar -xzf cf.tgz
+
              sudo install cf /usr/local/bin/cf
 
       - name: Verify CF CLI
