@@ -41,13 +41,13 @@ jobs:
       # 👉 THIS IS WHERE YOUR CODE STARTS
       - name: Install CF CLI
         run: |
-          wget -q -O cf-cli.deb https://packages.cloudfoundry.org/stable?release=debian64&source=github
-          sudo dpkg -i cf-cli.deb
+         curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&source=github" | tar -zx
+         sudo mv cf /usr/local/bin
 
       - name: Install CF MultiApps Plugin
         run: |
           cf install-plugin -f multiapps
-          
+
       - name: Login to SAP BTP
         run: |
           cf login -a ${{ secrets.CF_API }} \
