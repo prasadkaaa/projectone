@@ -3,7 +3,7 @@ const app = express();
 
 
 app.get('/hello', (req, res) => {
-    res.send('Hello from CAP111 🚀');
+    res.send('Hello from CAP 🚀');
 });
 
 const port = process.env.PORT || 4004;

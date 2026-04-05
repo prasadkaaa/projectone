@@ -1,0 +1,12 @@
+{
+  "name": "cap-project",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^9",
+    "express": "^4"
+  },
+  "scripts": {
+    "start": "cds run"
+  }
+}
