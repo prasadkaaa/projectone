@@ -45,17 +45,17 @@ jobs:
       - name: CF Login
         run: |
             docker run --rm \
-            -e CF_API=${{ secrets.CF_API }} \
-            -e CF_USERNAME=${{ secrets.CF_USERNAME }} \
-            -e CF_PASSWORD=${{ secrets.CF_PASSWORD }} \
-            -e CF_ORG=${{ secrets.CF_ORG }} \
-            -e CF_SPACE=${{ secrets.CF_SPACE }} \
-            -v $PWD:/workspace \
-            -w /workspace \
-            ghcr.io/cloudfoundry/cli:latest \
-            sh -c "
-            cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE
-            "
+              -e CF_API=${{ secrets.CF_API }} \
+              -e CF_USERNAME=${{ secrets.CF_USERNAME }} \
+              -e CF_PASSWORD=${{ secrets.CF_PASSWORD }} \
+              -e CF_ORG=${{ secrets.CF_ORG }} \
+              -e CF_SPACE=${{ secrets.CF_SPACE }} \
+              -v $PWD:/workspace \
+              -w /workspace \
+              ghcr.io/cloudfoundry/cli:latest \
+              sh -c "
+              cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE
+              "
 
       - name: Deploy to BTP
         run: |
