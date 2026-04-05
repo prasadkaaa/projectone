@@ -59,7 +59,7 @@ jobs:
 
       - name: Deploy to BTP
         run: |
-              docker run --rm \
+            docker run --rm \
               -e CF_API=${{ secrets.CF_API }} \
               -e CF_USERNAME=${{ secrets.CF_USERNAME }} \
               -e CF_PASSWORD=${{ secrets.CF_PASSWORD }} \
@@ -68,8 +68,4 @@ jobs:
               -v $PWD:/workspace \
               -w /workspace \
               ghcr.io/cloudfoundry/cli:latest \
-              sh -c "
-              cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE &&
-              cf install-plugin -f multiapps &&
-              cf deploy mta_archives/*.mtar -f
-              "
+              sh -c "cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE && cf install-plugin -f multiapps && cf deploy mta_archives/*.mtar -f"
