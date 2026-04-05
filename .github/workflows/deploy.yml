@@ -41,13 +41,16 @@ jobs:
       # 👉 THIS IS WHERE YOUR CODE STARTS
       - name: Install CF CLI
         run: |
+         sudo rm -f /usr/local/bin/cf
+
          wget -q https://packages.cloudfoundry.org/stable?release=linux64-binary -O cf.tgz
          tar -xzf cf.tgz
          sudo mv cf /usr/local/bin/cf
          sudo chmod +x /usr/local/bin/cf
 
       - name: Verify CF CLI
-        run:  which cf && cf --version
+        run:  which cf
+              cf --version
 
       - name: Install CF MultiApps Plugin
         run: |
