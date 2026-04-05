@@ -20,7 +20,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: 'npm'
 
       - name: Install Dependencies
         run: npm install
@@ -43,6 +44,10 @@ jobs:
           wget -q -O cf-cli.deb https://packages.cloudfoundry.org/stable?release=debian64&source=github
           sudo dpkg -i cf-cli.deb
 
+      - name: Install CF MultiApps Plugin
+        run: |
+          cf install-plugin -f multiapps
+          
       - name: Login to SAP BTP
         run: |
           cf login -a ${{ secrets.CF_API }} \
