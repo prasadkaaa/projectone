@@ -45,18 +45,8 @@ jobs:
               sudo unlink /usr/local/bin/cf
               fi
 
-      - name: Install CF CLI
-        run: |
-             sudo rm -f /usr/local/bin/cf
-
-             wget https://github.com/cloudfoundry/cli/releases/download/v7.7.7/cf7-cli_7.7.7_linux_x86-64.tgz -O cf.tgz
-             tar -xzf cf.tgz
-
-             sudo install cf /usr/local/bin/cf
-
-      - name: Verify CF CLI
-        run:  which cf
-              cf --version
+      - name: Setup CF CLI
+        uses: cloudfoundry/cf-cli-action@v2
 
       - name: Install CF MultiApps Plugin
         run: |
