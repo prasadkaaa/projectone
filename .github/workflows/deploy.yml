@@ -54,5 +54,5 @@ jobs:
             -e CF_SPACE \
             -v "$PWD:/workspace" \
             -w /workspace \
-            ghcr.io/cloudfoundry/cli:latest \
+            cloudfoundry/cli:latest \
             sh -c 'cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE && cf install-plugin -f multiapps && cf deploy mta_archives/*.mtar -f'
