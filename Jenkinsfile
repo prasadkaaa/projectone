@@ -24,7 +24,7 @@ pipeline {
 
         stage('Build MTA') {
             steps {
-                bat 'npx mbt build'
+                bat 'npx mbt build' 
             }
         }
 
