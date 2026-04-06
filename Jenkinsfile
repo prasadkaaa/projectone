@@ -1,9 +1,6 @@
 pipeline {
     agent any
 
-    
-
-
     environment {
         CF_API = "https://api.cf.us10-001.hana.ondemand.com"
         ORG = "6e3b2a68trial"
