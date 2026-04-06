@@ -7,12 +7,11 @@ pipeline {
         SPACE = "dev"
     }
     
-
     stages {
 
         stage('Checkout') {
             steps {
-                 checkout scm 
+                 checkout scm
             }
         }
 
