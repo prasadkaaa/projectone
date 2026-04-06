@@ -12,13 +12,14 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/prasadkaaa/projectone.git'
+                checkout scm
             }
         }
 
          stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                 bat 'dir'
+                 bat 'npm install'
             }
         }
 
