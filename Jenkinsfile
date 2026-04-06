@@ -28,7 +28,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to BTP') {
+        stage('Deploy to BTPP') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'btp-credentials',
