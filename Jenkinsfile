@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    
+
+
     environment {
         CF_API = "https://api.cf.us10-001.hana.ondemand.com"
         ORG = "6e3b2a68trial"
@@ -12,12 +15,13 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/prasadkaaa/projectone.git'
+                 checkout scm
             }
         }
 
          stage('Install Dependencies') {
             steps {
+                bat 'dir'
                 bat 'npm install'
             }
         }
