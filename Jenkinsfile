@@ -15,21 +15,19 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Check Make') {
-            steps {
-                bat 'make --version'
+        stage('Build MTA (Docker)') {
+            agent {
+                docker {
+                    image 'node:18'
+                }
             }
-        }
-
-         stage('Install Dependencies') {
+            
             steps {
-                bat 'npm install'
-            }
-        }
-
-        stage('Build MTA') {
-            steps {
-                bat 'npx mbt build' 
+                sh '''
+                npm install
+                npm install -g mbt
+                mbt build
+                '''
             }
         }
 
