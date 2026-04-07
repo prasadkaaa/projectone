@@ -30,7 +30,7 @@ pipeline {
         npm ci && \
         npm install -g mbt && \
         mbt build && \
-        cp /app/mta_archives/*.mtar /src/mta_archives/"
+        cat /app/mta_archives/*.mtar > /src/mta_archives/app.mtar
         '''
     }
 }
