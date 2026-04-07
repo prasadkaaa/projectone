@@ -30,7 +30,7 @@ pipeline {
                 npm install -g mbt &&
                 mbt build &&
                 cp -r mta_archives /src/
-                 "
+                "
                 '''
                 }
        }
