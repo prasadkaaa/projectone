@@ -15,13 +15,23 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build MTA (Docker Clean Way)') {
-            steps {
-                bat '''
-                docker run --rm -v %cd%:/workspace -w /workspace node:20 bash -c "apt-get update && apt-get install -y make && npm ci --no-audit --no-fund && npm install -g mbt && mbt build"
-                '''
-            }
-       }
+        stage('Build MTA (Stable Docker Build)') {
+    steps {
+        bat '''
+        docker run --rm ^
+        -v %cd%:/src ^
+        node:20 ^
+        bash -c "apt-get update && apt-get install -y make && \
+        rm -rf /app && mkdir /app && \
+        cp -r /src/. /app && \
+        cd /app && \
+        npm ci && \
+        npm install -g mbt && \
+        mbt build && \
+        cp -r mta_archives /src/"
+        '''
+    }
+}
 
         stage('Deploy to BTP') {
             steps {
