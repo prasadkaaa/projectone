@@ -17,15 +17,16 @@ pipeline {
         }
         stage('Build MTA (Docker Run)') {
             steps {
-                 bat '''
-                 docker run --rm ^
+                bat '''
+                docker run --rm ^
+                -u root ^
                 -v %cd%:/app ^
                 -w /app ^
-                node:18 ^
-                sh -c "apt-get update && apt-get install -y make && npm install && npm install -g mbt && mbt build"
+                node:20 ^
+                 sh -c "apt-get update && apt-get install -y make && npm install && npm install -g mbt && mbt build"
                 '''
-    }
-}
+                    }
+       }
 
         stage('Deploy to BTP') {
             steps {
