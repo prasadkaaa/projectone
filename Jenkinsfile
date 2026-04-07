@@ -37,7 +37,7 @@ pipeline {
 
         stage('Deploy to BTP') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'btp-creds', usernameVariable: 'CF_USER', passwordVariable: 'CF_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'btp-credentials', usernameVariable: 'CF_USER', passwordVariable: 'CF_PASS')]) {
                 bat '''
                 docker run --rm ^
                 -v %cd%:/workspace ^
