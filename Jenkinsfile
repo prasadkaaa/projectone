@@ -18,21 +18,9 @@ pipeline {
         stage('Build MTA (Docker Clean Way)') {
             steps {
                 bat '''
-                docker run --rm ^
-                -v %cd%:/src ^
-                node:20 ^
-                sh -c "
-                apt-get update && apt-get install -y make &&
-                mkdir /app &&
-                cp -r /src/* /app/ &&
-                cd /app &&
-                npm install &&
-                npm install -g mbt &&
-                mbt build &&
-                cp -r mta_archives /src/
-                "
+                docker run --rm -v %cd%:/workspace -w /workspace node:20 bash -c "apt-get update && apt-get install -y make && npm install && npm install -g mbt && mbt build"
                 '''
-                }
+            }
        }
 
         stage('Deploy to BTP') {
