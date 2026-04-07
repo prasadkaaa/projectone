@@ -17,20 +17,20 @@ pipeline {
         }
         stage('Build MTA (Stable Docker Build)') {
     steps {
-        bat 'mkdir mta_archives || exit 0'
-
         bat '''
         docker run --rm ^
         -v %cd%:/src ^
-        node:20 ^
+        node:18 ^
         bash -c "apt-get update && apt-get install -y make && \
         rm -rf /app && mkdir /app && \
         cp -r /src/. /app && \
         cd /app && \
         npm ci && \
         npm install -g mbt && \
+        npx cds build && \
         mbt build && \
-        cat /app/mta_archives/*.mtar > /src/mta_archives/app.mtar
+        mkdir -p /src/mta_archives && \
+        cp /app/mta_archives/*.mtar /src/mta_archives/"
         '''
     }
 }
