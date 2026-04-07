@@ -16,7 +16,7 @@ pipeline {
             }
         }
         stage('Build MTA (Stable Docker Build)') {
-    steps {
+     steps {
         bat '''
         docker run --rm ^
         -v %cd%:/src ^
@@ -26,8 +26,9 @@ pipeline {
         cp -r /src/. /workspace && \
         cd /workspace && \
         npm ci && \
+        npm install -g @sap/cds-dk && \
         npm install -g mbt && \
-        npx cds build && \
+        cds build && \
         mbt build && \
         mkdir -p /src/mta_archives && \
         cp /workspace/mta_archives/*.mtar /src/mta_archives/"
