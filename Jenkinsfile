@@ -20,17 +20,17 @@ pipeline {
         bat '''
         docker run --rm ^
         -v %cd%:/src ^
-        node:18 ^
+        node:20 ^
         bash -c "apt-get update && apt-get install -y make && \
-        rm -rf /app && mkdir /app && \
-        cp -r /src/. /app && \
-        cd /app && \
+        rm -rf /workspace && mkdir /workspace && \
+        cp -r /src/. /workspace && \
+        cd /workspace && \
         npm ci && \
         npm install -g mbt && \
         npx cds build && \
         mbt build && \
         mkdir -p /src/mta_archives && \
-        cp /app/mta_archives/*.mtar /src/mta_archives/"
+        cp /workspace/mta_archives/*.mtar /src/mta_archives/"
         '''
     }
 }
