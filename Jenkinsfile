@@ -15,21 +15,17 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build MTA (Docker)') {
-            agent {
-                docker {
-                    image 'node:18'
-                }
-            }
-            
+        stage('Build MTA (Docker Run)') {
             steps {
-                sh '''
-                npm install
-                npm install -g mbt
-                mbt build
+                 bat '''
+                 docker run --rm ^
+                -v %cd%:/app ^
+                -w /app ^
+                node:18 ^
+                sh -c "apt-get update && apt-get install -y make && npm install && npm install -g mbt && mbt build"
                 '''
-            }
-        }
+    }
+}
 
         stage('Deploy to BTP') {
             steps {
