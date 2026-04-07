@@ -47,7 +47,9 @@ pipeline {
                 ppiper/cf-cli ^
                 sh -c "cf install-plugin multiapps -f && \
                 cf login -a https://api.cf.us10-001.hana.ondemand.com -u $CF_USER -p $CF_PASS -o 6e3b2a68trial -s dev && \
-                cf deploy $(ls mta_archives/*.mtar)"
+                MTAR_FILE=$(ls mta_archives/*.mtar) && \
+                echo Deploying $MTAR_FILE && \
+                cf deploy $MTAR_FILE"
                 '''
                 }
             }
