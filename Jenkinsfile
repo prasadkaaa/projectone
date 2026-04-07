@@ -40,6 +40,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'btp-credentials', usernameVariable: 'CF_USER', passwordVariable: 'CF_PASS')]) {
                 bat '''
                 docker run --rm ^
+                -e CF_USER=%CF_USER% ^
+                -e CF_PASS=%CF_PASS% ^
                 -v %cd%:/workspace ^
                 -w /workspace ^
                 ppiper/cf-cli ^
