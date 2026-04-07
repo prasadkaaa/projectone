@@ -37,17 +37,16 @@ pipeline {
 
         stage('Deploy to BTP') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'btp-credentials',
-                    usernameVariable: 'BTP_USER',
-                    passwordVariable: 'BTP_PASS'
-                )]) {
-                    bat """
-                    cf login -a %CF_API% -u %BTP_USER% -p %BTP_PASS% -o %ORG% -s %SPACE%
-                    cf deploy mta_archives\\*.mtar
-                    """
+                withCredentials([usernamePassword(credentialsId: 'btp-creds', usernameVariable: 'CF_USER', passwordVariable: 'CF_PASS')]) {
+                bat '''
+                docker run --rm ^
+                -v %cd%:/workspace ^
+                -w /workspace ^
+                ppiper/cf-cli ^
+                sh -c "cf install-plugin multiapps -f && cf login -a https://api.cf.us10-001.hana.ondemand.com -u %CF_USER% -p %CF_PASS% -o 6e3b2a68trial -s dev && cf deploy mta_archives/*.mtar"
+                '''
                 }
             }
-        }
+       }
     }
 }
