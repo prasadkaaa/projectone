@@ -15,6 +15,11 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Check Make') {
+            steps {
+                bat 'make --version'
+            }
+        }
 
          stage('Install Dependencies') {
             steps {
