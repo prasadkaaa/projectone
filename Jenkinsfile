@@ -17,6 +17,8 @@ pipeline {
         }
         stage('Build MTA (Stable Docker Build)') {
     steps {
+        bat 'mkdir mta_archives || exit 0'
+        
         bat '''
         docker run --rm ^
         -v %cd%:/src ^
