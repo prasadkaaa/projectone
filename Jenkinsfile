@@ -18,7 +18,7 @@ pipeline {
         stage('Build MTA (Docker Clean Way)') {
             steps {
                 bat '''
-                docker run --rm -v %cd%:/workspace -w /workspace node:20 bash -c "apt-get update && apt-get install -y make && npm install && npm install -g mbt && mbt build"
+                docker run --rm -v %cd%:/workspace -w /workspace node:20 bash -c "apt-get update && apt-get install -y make && npm ci --no-audit --no-fund && npm install -g mbt && mbt build"
                 '''
             }
        }
