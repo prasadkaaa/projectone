@@ -18,15 +18,10 @@ pipeline {
                     passwordVariable: 'BTP_PASS'
                 )]) {
 
-                    bat """
+                   bat """
 docker run --rm ^
 -v "%cd%":/src ^
 -w /tmp ^
--e CF_API=%CF_API% ^
--e CF_ORG=%CF_ORG% ^
--e CF_SPACE=%CF_SPACE% ^
--e BTP_USER=%BTP_USER% ^
--e BTP_PASS=%BTP_PASS% ^
 node:20 sh -c " \
     apt-get update && \
     apt-get install -y curl && \
@@ -40,7 +35,7 @@ node:20 sh -c " \
     npm install && \
     npm install -g @sap/cds-dk mbt && \
     mbt build && \
-    cf login -a \\$CF_API -u \\$BTP_USER -p \\$BTP_PASS -o \\$CF_ORG -s \\$CF_SPACE && \
+    cf login -a %CF_API% -u %BTP_USER% -p %BTP_PASS% -o %CF_ORG% -s %CF_SPACE% && \
     cf deploy mta_archives/*.mtar \
 "
 """
