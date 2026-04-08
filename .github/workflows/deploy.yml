@@ -1,93 +1,93 @@
-# name: Deploy CAP to SAP BTP
+name: Deploy CAP to SAP BTP
 
 
-# env:
-#   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     branches:
-#       - main    
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main    
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     if: github.event_name == 'pull_request'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
 
-#     steps:
-#       - name: Checkout Code
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 22
-#           cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
 
-#       - name: Install Dependencies
-#         run: npm install
+      - name: Install Dependencies
+        run: npm install
         
 
-#       - name: Install CDS & MBT
-#         run: |
-#           npm install -g @sap/cds-dk
-#           npm install -g mbt
+      - name: Install CDS & MBT
+        run: |
+          npm install -g @sap/cds-dk
+          npm install -g mbt
 
-#       - name: Build CAP Project
-#         run: cds build
+      - name: Build CAP Project
+        run: cds build
 
-#       - name: Build MTA (Validation Only)
-#         run: mbt build
+      - name: Build MTA (Validation Only)
+        run: mbt build
         
-#    # 🚀 DEPLOY (runs only after merge to main)
-#   deploy:
-#     runs-on: ubuntu-latest
-#     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+   # 🚀 DEPLOY (runs only after merge to main)
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
-#     steps:
-#       - name: Checkout Code
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 22
-#           cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
 
-#       - name: Install Dependencies
-#         run: npm install
+      - name: Install Dependencies
+        run: npm install
 
-#       - name: Install CDS & MBT
-#         run: |
-#           npm install -g @sap/cds-dk
-#           npm install -g mbt
+      - name: Install CDS & MBT
+        run: |
+          npm install -g @sap/cds-dk
+          npm install -g mbt
 
-#       - name: Build CAP Project
-#         run: cds build
+      - name: Build CAP Project
+        run: cds build
 
-#       - name: Build MTA
-#         run: mbt build
+      - name: Build MTA
+        run: mbt build
 
-#       - name: Deploy to BTP
-#         env:
-#           CF_API: ${{ secrets.CF_API }}
-#           CF_USERNAME: ${{ secrets.CF_USERNAME }}
-#           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-#           CF_ORG: ${{ secrets.CF_ORG }}
-#           CF_SPACE: ${{ secrets.CF_SPACE }}
-#         run: |
-#           docker run --rm \
-#             -e CF_API \
-#             -e CF_USERNAME \
-#             -e CF_PASSWORD \
-#             -e CF_ORG \
-#             -e CF_SPACE \
-#             -v "$PWD:/workspace" \
-#             -w /workspace \
-#             cloudfoundry/cli:latest \
-#             sh -c 'cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE && cf install-plugin -f multiapps && cf deploy mta_archives/*.mtar -f'      
+      - name: Deploy to BTP
+        env:
+          CF_API: ${{ secrets.CF_API }}
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_ORG: ${{ secrets.CF_ORG }}
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+        run: |
+          docker run --rm \
+            -e CF_API \
+            -e CF_USERNAME \
+            -e CF_PASSWORD \
+            -e CF_ORG \
+            -e CF_SPACE \
+            -v "$PWD:/workspace" \
+            -w /workspace \
+            cloudfoundry/cli:latest \
+            sh -c 'cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE && cf install-plugin -f multiapps && cf deploy mta_archives/*.mtar -f'      
 
       
