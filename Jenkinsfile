@@ -22,15 +22,15 @@ pipeline {
             rmdir /s /q node_modules 2>nul
             rmdir /s /q mta_archives 2>nul
 
-            docker run --rm ^
+             docker run --rm ^
             -v %cd%:/workspace ^
             -w /workspace ^
             node:20 ^
-            bash -c "apt-get update && apt-get install -y make && ^
-            npm install && ^
-            npm install -g @sap/cds-dk && ^
-            npm install -g mbt && ^
-            cds build && ^
+            bash -c "apt-get update && apt-get install -y make && \
+            npm install && \
+            npm install -g @sap/cds-dk && \
+            npm install -g mbt && \
+            cds build && \
             mbt build"
             '''
     }
