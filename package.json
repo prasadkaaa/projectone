@@ -1,0 +1,14 @@
+{
+  "name": "cap-jenkins-demo",
+  "version": "1.0.0",
+  "description": "Simple CAP project for Jenkins deployment",
+  "dependencies": {
+    "@sap/cds": "^9"
+  },
+  "scripts": {
+    "start": "cds run"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
