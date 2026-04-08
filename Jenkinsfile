@@ -6,11 +6,10 @@ pipeline {
     }
 
     environment {
-        CF_API = 'https://api.cf.<region>.hana.ondemand.com'
-        CF_ORG = 'your-org'
-        CF_SPACE = 'your-space'
-        CF_USER = credentials('cf-user')       // Jenkins credential
-        CF_PASSWORD = credentials('cf-password')
+        CF_API = "https://api.cf.us10-001.hana.ondemand.com"
+        CF_ORG = "6e3b2a68trial"
+        CF_SPACE = "dev"
+       
     }
 
     stages {
@@ -41,10 +40,16 @@ pipeline {
 
         stage('Deploy to CF') {
             steps {
-                sh '''
-                cf login -a $CF_API -u $CF_USER -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE
-                cf deploy mta_archives/*.mtar
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'btp-credentials',
+                    usernameVariable: 'BTP_USER',
+                    passwordVariable: 'BTP_PASS'
+                )]) {
+                    sh '''
+					cf login -a $CF_API -u $BTP_USER -p $BTP_PASS -o $CF_ORG -s $CF_SPACE
+					cf deploy mta_archives/*.mtar
+					'''
+                }
             }
         }
     }
