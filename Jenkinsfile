@@ -15,22 +15,19 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build MTA (Stable Docker Build)') {
+       stage('Build MTA (Final Stable)') {
     steps {
         bat '''
         docker run --rm ^
-        -v %cd%:/src ^
+        -v %cd%:/workspace ^
+        -w /workspace ^
         node:20 ^
         bash -c "apt-get update && apt-get install -y make && \
-        rm -rf /workspace && mkdir /workspace && \
-        cp -r /src/. /workspace && \
-        cd /workspace && \
         npm ci && \
         npm install -g @sap/cds-dk && \
         npm install -g mbt && \
         cds build && \
-        mbt build && \
-        cp /workspace/mta_archives/*.mtar /src/"
+        mbt build"
         '''
     }
 }
