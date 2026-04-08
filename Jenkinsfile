@@ -38,6 +38,7 @@ node:20 sh -c " \
     cf login -a '%CF_API%' -u '%BTP_USER%' -p '%BTP_PASS%' -o '%CF_ORG%' -s '%CF_SPACE%' --skip-ssl-validation && \
     cf deploy mta_archives/*.mtar \
 "
+"""
                 }
             }
         }
