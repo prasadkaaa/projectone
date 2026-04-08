@@ -8,60 +8,34 @@ pipeline {
        
     }
 
-    stages {
+     stages {
 
-        stage('Build in Docker') {
-    steps {
-        bat '''
-        docker run --rm ^
-        -v "%cd%":/src ^
-        -w /tmp ^
-        node:20 sh -c " \
-            cp -r /src /tmp/app && \
-            cd /tmp/app && \
-            node -v && \
-            npm install && \
-            npm install -g @sap/cds-dk mbt && \
-            mbt build \
-        "
-        '''
-    }
-}
-
-        stage('Verify Node ok') {
-            steps {
-                 bat 'node -v'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                npm install
-                npm install -g @sap/cds-dk mbt cf-cli
-                '''
-            }
-        }
-
-        stage('Build MTA') {
-            steps {
-                sh 'mbt build'
-            }
-        }
-
-        stage('Deploy to CF') {
+        stage('Build + Deploy in Docker') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'btp-credentials',
                     usernameVariable: 'BTP_USER',
                     passwordVariable: 'BTP_PASS'
                 )]) {
-                    sh '''
-					cf login -a $CF_API -u $BTP_USER -p $BTP_PASS -o $CF_ORG -s $CF_SPACE
-					cf deploy mta_archives/*.mtar
-					'''
+
+                    bat '''
+                    docker run --rm ^
+                    -v "%cd%":/src ^
+                    -w /tmp ^
+                    node:20 sh -c " \
+                        cp -r /src /tmp/app && \
+                        cd /tmp/app && \
+                        node -v && \
+                        npm install && \
+                        npm install -g @sap/cds-dk mbt cf-cli && \
+                        mbt build && \
+                        cf login -a $CF_API -u $BTP_USER -p $BTP_PASS -o $CF_ORG -s $CF_SPACE && \
+                        cf deploy mta_archives/*.mtar \
+                    "
+                    '''
                 }
             }
         }
+
     }
 }
