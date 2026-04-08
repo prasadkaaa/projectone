@@ -11,10 +11,22 @@ pipeline {
     stages {
 
         stage('Build in Docker') {
-            steps {
-                bat 'docker run --rm -v "%cd%":/app -w /app node:20 sh -c "node -v && npm install && npm install -g @sap/cds-dk mbt && mbt build"'
-            }
-        }
+    steps {
+        bat '''
+        docker run --rm ^
+        -v "%cd%":/src ^
+        -w /tmp ^
+        node:20 sh -c " \
+            cp -r /src /tmp/app && \
+            cd /tmp/app && \
+            node -v && \
+            npm install && \
+            npm install -g @sap/cds-dk mbt && \
+            mbt build \
+        "
+        '''
+    }
+}
 
         stage('Verify Node ok') {
             steps {
