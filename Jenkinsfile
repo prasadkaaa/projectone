@@ -18,21 +18,32 @@ pipeline {
                     passwordVariable: 'BTP_PASS'
                 )]) {
 
-                    bat '''
-                    docker run --rm ^
-                    -v "%cd%":/src ^
-                    -w /tmp ^
-                    node:20 sh -c " \
-                        cp -r /src /tmp/app && \
-                        cd /tmp/app && \
-                        node -v && \
-                        npm install && \
-                        npm install -g @sap/cds-dk mbt cf-cli && \
-                        mbt build && \
-                        cf login -a $CF_API -u $BTP_USER -p $BTP_PASS -o $CF_ORG -s $CF_SPACE && \
-                        cf deploy mta_archives/*.mtar \
-                    "
-                    '''
+                    bat """
+docker run --rm ^
+-v "%cd%":/src ^
+-w /tmp ^
+-e CF_API=%CF_API% ^
+-e CF_ORG=%CF_ORG% ^
+-e CF_SPACE=%CF_SPACE% ^
+-e BTP_USER=%BTP_USER% ^
+-e BTP_PASS=%BTP_PASS% ^
+node:20 sh -c " \
+    apt-get update && \
+    apt-get install -y curl && \
+    curl -L https://packages.cloudfoundry.org/stable?release=linux64-binary&source=github -o cf.tgz && \
+    tar -xzf cf.tgz && \
+    mv cf /usr/local/bin && \
+    chmod +x /usr/local/bin/cf && \
+    cf --version && \
+    cp -r /src /tmp/app && \
+    cd /tmp/app && \
+    npm install && \
+    npm install -g @sap/cds-dk mbt && \
+    mbt build && \
+    cf login -a \$CF_API -u \$BTP_USER -p \$BTP_PASS -o \$CF_ORG -s \$CF_SPACE && \
+    cf deploy mta_archives/*.mtar \
+"
+"""
                 }
             }
         }
