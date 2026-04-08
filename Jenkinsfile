@@ -35,10 +35,9 @@ node:20 sh -c " \
     npm install && \
     npm install -g @sap/cds-dk mbt && \
     mbt build && \
-    cf login -a "%CF_API%" -u "%BTP_USER%" -p "%BTP_PASS%" -o "%CF_ORG%" -s "%CF_SPACE%" --skip-ssl-validation && \
+    cf login -a '%CF_API%' -u '%BTP_USER%' -p '%BTP_PASS%' -o '%CF_ORG%' -s '%CF_SPACE%' --skip-ssl-validation && \
     cf deploy mta_archives/*.mtar \
 "
-"""
                 }
             }
         }
