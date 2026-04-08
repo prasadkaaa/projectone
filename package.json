@@ -6,7 +6,7 @@
   "node": "18.x"
 },
   "dependencies": {
-    "@sap/cds": "^9",
+    "@sap/cds": "^7.9.5",
     "express": "^4"
   },
   "scripts": {
