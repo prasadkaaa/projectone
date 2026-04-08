@@ -18,6 +18,11 @@ pipeline {
        stage('Build MTA (Final Stable)') {
     steps {
         bat '''
+        echo Cleaning workspace...
+        rmdir /s /q node_modules 2>nul
+        rmdir /s /q mta_archives 2>nul
+        del package-lock.json 2>nul
+
         docker run --rm ^
         -v %cd%:/workspace ^
         -w /workspace ^
