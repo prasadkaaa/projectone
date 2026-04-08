@@ -25,7 +25,7 @@ pipeline {
         docker run --rm ^
         -v %cd%:/workspace ^
         node:18 ^
-        bash -c "apt-get update && apt-get install -y make && rm -rf /app && mkdir /app && cp -r /workspace/. /app && cd /app && npm install --no-package-lock && npm install -g @sap/cds-dk@8 && npm install -g mbt && mbt build && mkdir -p /workspace/mta_archives && cp /app/mta_archives/*.mtar /workspace/mta_archives/"
+        bash -c "apt-get update && apt-get install -y make && rm -rf /app && mkdir /app && cp -r /workspace/. /app && cd /app && npm install && npm install -g @sap/cds-dk@8 && npm install -g mbt && mbt build && mkdir -p /workspace/mta_archives && cp /app/mta_archives/*.mtar /workspace/mta_archives/"
         '''
 
         
