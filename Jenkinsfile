@@ -5,11 +5,9 @@ pipeline {
         CF_API = "https://api.cf.us10-001.hana.ondemand.com"
         CF_ORG = "6e3b2a68trial"
         CF_SPACE = "dev"
-       
     }
 
-     stages {
-
+    stages {
         stage('Build + Deploy in Docker') {
             steps {
                 withCredentials([usernamePassword(
@@ -18,15 +16,41 @@ pipeline {
                     passwordVariable: 'BTP_PASS'
                 )]) {
 
-                   bat """
+                    // Step 1: Create script file dynamically
+                    writeFile file: 'run.sh', text: '''
+#!/bin/sh
+apt-get update
+apt-get install -y curl
+
+curl -L https://packages.cloudfoundry.org/stable?release=linux64-binary&source=github -o cf.tgz
+tar -xzf cf.tgz
+mv cf /usr/local/bin
+chmod +x /usr/local/bin/cf
+
+cf --version
+
+cp -r /src /tmp/app
+cd /tmp/app
+
+npm install
+npm install -g @sap/cds-dk mbt
+
+mbt build
+
+cf login -a $CF_API -u $BTP_USER -p $BTP_PASS -o $CF_ORG -s $CF_SPACE --skip-ssl-validation
+
+cf deploy mta_archives/*.mtar
+'''
+
+                    // Step 2: Run inside Docker
+                    bat """
 docker run --rm ^
 -v "%cd%":/src ^
 -w /src ^
-node:20 sh deploy.sh
+node:20 sh run.sh
 """
                 }
             }
         }
-
     }
 }
