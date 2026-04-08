@@ -30,10 +30,7 @@ pipeline {
 
         stage('Verify Node ok') {
             steps {
-                sh '''
-                node -v
-                npm -v
-                '''
+                 bat 'node -v'
             }
         }
 
