@@ -16,24 +16,24 @@ pipeline {
             }
         }
        stage('Build MTA (Final Stable)') {
-    steps {
-        bat '''
-        echo Cleaning workspace...
-        rmdir /s /q node_modules 2>nul
-        rmdir /s /q mta_archives 2>nul
+        steps {
+            bat '''
+            echo Cleaning workspace...
+            rmdir /s /q node_modules 2>nul
+            rmdir /s /q mta_archives 2>nul
 
-        docker run --rm ^
-        -v %cd%:/workspace ^
-        -w /workspace ^
-        node:20 ^
-        bash -c "apt-get update && apt-get install -y make && ^
-        npm install && ^
-        npm install -g @sap/cds-dk && ^
-        npm install -g mbt && ^
-        cds build && ^
-        mbt build"
-        '''
-        }
+            docker run --rm ^
+            -v %cd%:/workspace ^
+            -w /workspace ^
+            node:20 ^
+            bash -c "apt-get update && apt-get install -y make && ^
+            npm install && ^
+            npm install -g @sap/cds-dk && ^
+            npm install -g mbt && ^
+            cds build && ^
+            mbt build"
+            '''
+    }
 }
 
         stage('Deploy to BTP') {
