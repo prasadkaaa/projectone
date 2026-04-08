@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:20'
-        }
-    }
+    agent any
 
     environment {
         CF_API = "https://api.cf.us10-001.hana.ondemand.com"
@@ -13,6 +9,22 @@ pipeline {
     }
 
     stages {
+
+        stage('Build in Docker') {
+            steps {
+                bat '''
+                docker run --rm ^
+                -v "%cd%":/app ^
+                -w /app ^
+                node:20 sh -c "
+                    node -v &&
+                    npm install &&
+                    npm install -g @sap/cds-dk mbt &&
+                    mbt build
+                "
+                '''
+            }
+        }
 
         stage('Verify Node ok') {
             steps {
