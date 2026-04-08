@@ -10,10 +10,18 @@ pipeline {
 
         stage('Run Node Server') {
             steps {
-                // Stop any previous node server
-                bat 'taskkill /F /IM node.exe || echo No node process running'
-                
-                // Start server in background
+                // Stop old Node server safely
+                bat """
+                @echo off
+                tasklist /FI "IMAGENAME eq node.exe" | find /I "node.exe" >nul
+                if %ERRORLEVEL%==0 (
+                    taskkill /F /IM node.exe
+                ) else (
+                    echo No node process running
+                )
+                """
+
+                // Start Node server in background
                 bat 'start /B node server.js'
             }
         }
@@ -21,7 +29,7 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment Successful! Open browser: http://localhost:3000'
+            echo 'Deployment Successful! Open browser:http://localhost:3000'
         }
     }
 }
