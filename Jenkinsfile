@@ -27,7 +27,7 @@ pipeline {
             -w /workspace ^
             node:20 ^
             bash -c "apt-get update && apt-get install -y make && \
-            npm install && \
+            npm install --no-package-lock && \
             npm install -g @sap/cds-dk && \
             npm install -g mbt && \
             cds build && \
