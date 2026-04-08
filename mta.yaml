@@ -8,7 +8,9 @@ modules:
     type: nodejs
     path: srv
     parameters:
-      memory: 128M
+      buildpack: nodejs_buildpack
+      memory: 256M
+      disk-quota: 512M
     provides:
       - name: srv-api
         properties:
