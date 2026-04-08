@@ -21,20 +21,19 @@ pipeline {
         echo Cleaning workspace...
         rmdir /s /q node_modules 2>nul
         rmdir /s /q mta_archives 2>nul
-        del package-lock.json 2>nul
+        '''
 
         docker run --rm ^
         -v %cd%:/workspace ^
         -w /workspace ^
         node:20 ^
         bash -c "apt-get update && apt-get install -y make && \
-        npm ci && \
+        npm install && \
         npm install -g @sap/cds-dk && \
         npm install -g mbt && \
         cds build && \
         mbt build"
-        '''
-    }
+        }
 }
 
         stage('Deploy to BTP') {
