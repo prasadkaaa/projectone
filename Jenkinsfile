@@ -49,7 +49,7 @@ pipeline {
                 ls -l mta_archives && \
                 MTAR_FILE=$(ls mta_archives/*.mtar | head -n 1) && \
                 echo Deploying $MTAR_FILE && \
-                cf deploy \"$MTAR_FILE\""
+                cf deploy $MTAR_FILE -f"
                 '''
                 }
             }
