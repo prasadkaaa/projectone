@@ -25,27 +25,11 @@ pipeline {
         docker run --rm ^
         -v %cd%:/workspace ^
         node:20 ^
-        bash -c "
-        apt-get update && apt-get install -y make &&
-
-        echo Copying project... &&
-        rm -rf /app && mkdir /app &&
-        cp -r /workspace/. /app &&
-
-        cd /app &&
-
-        npm install --no-package-lock &&
-        npm install -g @sap/cds-dk &&
-        npm install -g mbt &&
-
-        cds build &&
-        mbt build &&
-
-        echo Copying MTAR back... &&
-        mkdir -p /workspace/mta_archives &&
-        cp /app/mta_archives/*.mtar /workspace/mta_archives/
-        "
+        bash -c "apt-get update && apt-get install -y make && rm -rf /app && mkdir /app && cp -r /workspace/. /app && cd /app && npm install --no-package-lock && npm install -g @sap/cds-dk && npm install -g mbt && cds build && mbt build && mkdir -p /workspace/mta_archives && cp /app/mta_archives/*.mtar /workspace/mta_archives/"
         '''
+
+        
+        
     }
 }
 
