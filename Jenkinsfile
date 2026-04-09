@@ -22,6 +22,13 @@ pipeline {
                 '''
             }
         }
+
+         stage('Archive HTML') {
+            steps {
+                // Keep a copy of the file as a build artifact
+                archiveArtifacts artifacts: 'index.html', allowEmptyArchive: true
+            }
+        }
     }
 
     post {
