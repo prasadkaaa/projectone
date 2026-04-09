@@ -20,6 +20,21 @@ pipeline {
                 echo Updated HTML content:
                 type %file%
                 '''
+                
+            }
+        }
+
+        stage('Publish HTML Report') {
+            steps {
+                // Correct usage with required parameters
+                publishHTML([
+                    reportDir: '.',                // location of index.html
+                    reportFiles: 'index.html',     // file to publish
+                    reportName: 'My HTML Page',    // how it shows in Jenkins
+                    allowMissing: false,           // fail if file missing
+                    alwaysLinkToLastBuild: true,  // link always points to last build
+                    keepAll: true                  // keep report for every build
+                ])
             }
         }
 
