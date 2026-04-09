@@ -16,10 +16,17 @@ pipeline {
                 bat '''
                 @echo off
                 set file=index.html
-                powershell -Command "(Get-Content %file%) -replace '<h1>.*</h1>', '<h1>New H1 from Jenkins</h1>' | Set-Content %file%"
+                powershell -Command "(Get-Content %file%) -replace '<h1>.*</h1>', '<h1>chnages reflected 11</h1>' | Set-Content %file%"
                 echo Updated HTML content:
                 type %file%
                 '''
+            }
+        }
+
+         stage('Archive HTML') {
+            steps {
+                // Keep a copy of the file as a build artifact
+                archiveArtifacts artifacts: 'index.html', allowEmptyArchive: true
             }
         }
     }
