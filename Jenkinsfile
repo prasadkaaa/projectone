@@ -20,6 +20,11 @@ pipeline {
                 echo Updated HTML content:
                 type %file%
                 '''
+                publishHTML([
+                 reportDir: '.', 
+                 reportFiles: 'index.html',
+                reportName: 'My HTML Page'
+                ])
             }
         }
 
