@@ -16,7 +16,7 @@ pipeline {
                 bat '''
                 @echo off
                 set file=index.html
-                powershell -Command "(Get-Content %file%) -replace '<h1>.*</h1>', '<h1>New H1 from Jenkins</h1>' | Set-Content %file%"
+                powershell -Command "(Get-Content %file%) -replace '<h1>.*</h1>', '<h1>prasad from Jenkins</h1>' | Set-Content %file%"
                 echo Updated HTML content:
                 type %file%
                 '''
