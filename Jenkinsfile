@@ -10,20 +10,7 @@ pipeline {
             }
         }
 
-        stage('Update HTML') {
-            steps {
-                dir("${WORKSPACE}") {
-                    // Simulate deployment: update <h1>
-                    bat '''
-                    @echo off
-                    set file=index.html
-                    powershell -Command "(Get-Content %file%) -replace '<h1>.*</h1>', '<h1>chnages reflected 11</h1>' | Set-Content %file%"
-                    echo Updated HTML content:
-                    type %file%
-                    '''
-                }
-            }
-        }
+        
 
         stage('Publish HTML Report') {
             steps {
