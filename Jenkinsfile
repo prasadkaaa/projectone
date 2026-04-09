@@ -26,11 +26,14 @@ pipeline {
 
         stage('Publish HTML Report') {
             steps {
-                // THIS is where you paste the publishHTML step
+                // Correct usage with required parameters
                 publishHTML([
-                    reportDir: '.',           // directory where index.html is located
-                    reportFiles: 'index.html', // the file to publish
-                    reportName: 'My HTML Page' // how it will appear in Jenkins UI
+                    reportDir: '.',                // location of index.html
+                    reportFiles: 'index.html',     // file to publish
+                    reportName: 'My HTML Page',    // how it shows in Jenkins
+                    allowMissing: false,           // fail if file missing
+                    alwaysLinkToLastBuild: true,  // link always points to last build
+                    keepAll: true                  // keep report for every build
                 ])
             }
         }
