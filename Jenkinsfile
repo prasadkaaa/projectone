@@ -10,37 +10,25 @@ pipeline {
             }
         }
 
-        stage('Update HTML') {
-            steps {
-                // Simulate deployment: update <h1>
-                bat '''
-                @echo off
-                set file=index.html
-                powershell -Command "(Get-Content %file%) -replace '<h1>.*</h1>', '<h1>chnages reflected 11</h1>' | Set-Content %file%"
-                echo Updated HTML content:
-                type %file%
-                '''
-                
-            }
-        }
+        
 
         stage('Publish HTML Report') {
             steps {
-                // Correct usage with required parameters
-                publishHTML([
-                    reportDir: '.',                // location of index.html
-                    reportFiles: 'index.html',     // file to publish
-                    reportName: 'My HTML Page',    // how it shows in Jenkins
-                    allowMissing: false,           // fail if file missing
-                    alwaysLinkToLastBuild: true,  // link always points to last build
-                    keepAll: true                  // keep report for every build
-                ])
+                dir("${WORKSPACE}") {
+                    publishHTML([
+                        reportDir: '.',                // location of index.html
+                        reportFiles: 'index.html',     // file to publish
+                        reportName: 'My HTML Page',    // how it shows in Jenkins
+                        allowMissing: false,           // fail if file missing
+                        alwaysLinkToLastBuild: true,  // link always points to last build
+                        keepAll: true                  // keep report for every build
+                    ])
+                }
             }
         }
 
-         stage('Archive HTML') {
+        stage('Archive HTML') {
             steps {
-                // Keep a copy of the file as a build artifact
                 archiveArtifacts artifacts: 'index.html', allowEmptyArchive: true
             }
         }
