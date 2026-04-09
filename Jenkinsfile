@@ -20,10 +20,17 @@ pipeline {
                 echo Updated HTML content:
                 type %file%
                 '''
+                
+            }
+        }
+
+        stage('Publish HTML Report') {
+            steps {
+                // THIS is where you paste the publishHTML step
                 publishHTML([
-                 reportDir: '.', 
-                 reportFiles: 'index.html',
-                reportName: 'My HTML Page'
+                    reportDir: '.',           // directory where index.html is located
+                    reportFiles: 'index.html', // the file to publish
+                    reportName: 'My HTML Page' // how it will appear in Jenkins UI
                 ])
             }
         }
