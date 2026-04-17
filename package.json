@@ -7,7 +7,7 @@
   "type": "commonjs",
   "main": "myfirst.js",
   "scripts": {
-    "start": "node --watch 01_express/expressSample.js"
+    "start": "node --watch 02_express_BookStore/index.js"
   },
   "dependencies": {
     "@types/express": "^5.0.6",
